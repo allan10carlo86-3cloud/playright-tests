@@ -11,6 +11,46 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+// BROWSERS env var: 'chromium', 'firefox', 'webkit', or comma-separated like 'chromium,firefox'
+const BROWSERS = (process.env.BROWSERS ?? 'chromium').split(',').map(b => b.trim());
+
+const allProjects = [
+  {
+    name: 'chromium',
+    use: {
+      ...devices['Desktop Chrome'],
+      headless: false,
+      launchOptions: {
+        args: ['--start-maximized']
+      },
+      acceptDownloads: true
+    }
+  },
+  {
+    name: 'firefox',
+    use: { 
+      ...devices['Desktop Firefox'],
+      headless: false,
+      launchOptions: {
+        args: ['--start-maximized']
+      },
+    }
+  },
+  {
+    name: 'webkit',
+    use: { 
+      ...devices['Desktop Safari'],
+      headless: false,
+      launchOptions: {
+        args: ['--start-maximized']
+      },
+    }
+  },
+];
+
+const projects = allProjects.filter(p => BROWSERS.includes(p.name));
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
@@ -20,14 +60,13 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 4,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: process.env.REPORT ? 'html' : [],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
-
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     screenshot: 'on',
@@ -39,32 +78,10 @@ export default defineConfig({
     },
   },
 
+
   /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-            use: {
-              ...devices['Desktop Chrome'],
-              headless: false,
-              launchOptions: {
-                slowMo: 1000,
-                args: ['--start-maximized']
-              },
-              acceptDownloads: true
-            }
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-
-    /* Test against mobile viewports. */
+  projects,
+      /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
     //   use: { ...devices['Pixel 5'] },
@@ -83,7 +100,7 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-  ],
+   
 
   /* Run your local dev server before starting the tests */
   // webServer: {
