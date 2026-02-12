@@ -1,10 +1,10 @@
 import {test as baseTest} from '@playwright/test';
 
 
-import _homePage from './homePage.ts';
-import _financialServicesPage from './financialServicesPage.ts';
-import _contactUsPage from './contactUsPage.ts'; 
-import _featureFile from './featureFile.ts';
+import _homePage from '@pageObjects/pageObjectsBadgeActivity/homePage';
+import _financialServicesPage from '@pageObjects/pageObjectsBadgeActivity/financialServicesPage';
+import _contactUsPage from '@pageObjects/pageObjectsBadgeActivity/contactUsPage'; 
+import _featureFile from '@footer/featureFile';
 
 
 type pages = {

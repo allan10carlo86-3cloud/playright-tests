@@ -9,17 +9,28 @@ export default class featureFile {
     
     }
 
+    async openWebsite({page, url}: { page: any; url: string }) {
+
+        await page.goto(url);    
+    }
+
     async FillOutContactFormWithError({ page, p_homePage, p_contactUsPage }: { page: any; p_homePage: any; p_contactUsPage: any })
     {   
-        await page.goto("https://3cloudsolutions.com/");    
-        await p_homePage.navigateToWhoWeAre();
         await p_homePage.navigateAndClickToFinancialServices();
-        await p_contactUsPage.enterValuesUnderContactUsWithError(
+        const iframe_contactUs = await p_contactUsPage.enterValuesUnderContactUsWithError(
         "John", 
         "Doe", 
         "johndoe@ibm.com", 
         "Example Corp", 
         "Manager", 
         "This is a test message."  );
+        
+        return iframe_contactUs;
     }
+
+    async validateErrorMessage({iframe_contactUs, p_contactUsPage}: {iframe_contactUs: any; p_contactUsPage: any}){
+        await p_contactUsPage.validateErrorMessage(iframe_contactUs);
+    }
+
+
 }

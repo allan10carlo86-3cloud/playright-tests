@@ -70,7 +70,11 @@ export default class contactUsPage {
         await iframe_contactUs.locator(this.textbox_Message).pressSequentially(message);         
         await iframe_contactUs.locator(this.button_Submit).click();
 
-        const extractedErrorMessage = await iframe_contactUs.locator(this.text_errorMessage_CompleteAllRequiredFields).textContent();
+        return iframe_contactUs;
+    }
+
+    public async validateErrorMessage(iframe_contactUs: any){
+          const extractedErrorMessage = await iframe_contactUs.locator(this.text_errorMessage_CompleteAllRequiredFields).textContent();
         assert(extractedErrorMessage?.trim() === this.validation_errorMessage_CompleteAllRequiredFields,  "The error message DID NOT matched the ones in our file" );
     }
 

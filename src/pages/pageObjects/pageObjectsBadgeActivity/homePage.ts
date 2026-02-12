@@ -1,5 +1,4 @@
 import { Page } from "@playwright/test";
-import { expect } from "@playwright/test";  
 
 
 
@@ -17,14 +16,11 @@ export default class homePage {
     
     
     constructor(public page: Page){
-
     }
-
     /*
         --- Methods Section ---
         In this section, all the methods to be used in the tests are defined.
     */
-
     /* 
         Descriptive Title: Navigate to Who We Are Menu 
         Method Description: This method hovers over the "Who We Are" menu item to reveal its dropdown options.
@@ -42,7 +38,9 @@ export default class homePage {
     */
     async navigateAndClickToFinancialServices(){
 
+        await this.navigateToWhoWeAre()
         await this.page.click(this.link_financialServices);
     }
+
 
 }
